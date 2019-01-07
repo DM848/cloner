@@ -8,8 +8,12 @@ mkdir -p ${DIR}
 cd ${DIR}
 
 TOKEN="${GITHUB_ACCESS_TOKEN_DM848}"
-# add ?token={TOKEN}, if you become rate limited or something
-curl -si "https://api.github.com/users/DM848/repos" | grep clone_url | cut -d '"' -f4 | xargs -i git clone {}
+URL="https://api.github.com/users/DM848/repos"
+if [[ ! -z ${TOKEN} ]]; then
+	URL="${URL}?token=${TOKEN}"
+fi
+
+curl -si "${URL}" | grep clone_url | cut -d '"' -f4 | xargs -i git clone {}
 
 cd ..
 echo "finished cloning the following repositories"
